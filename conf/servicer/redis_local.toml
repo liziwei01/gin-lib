@@ -1,0 +1,49 @@
+# Service的名字, 必选
+Name = "redis_local"
+
+# 各种自定义的参数, 会以 Option 的方式放到 Redis 中, 全部非必选
+# 连接超时
+ConnTimeOut = 1000
+# 写数据超时
+WriteTimeOut = 500
+# 读数据超时
+ReadTimeOut = 500
+# 请求失败后的重试次数: 总请求次数 = Retry + 1
+Retry = 2
+
+[Strategy]
+# 资源使用策略, 非必选, 默认使用 RoundRobin
+#RoundRobin-依次轮询
+#Random-随机
+#LocalityAware-la加权轮询, 需要策略配置, 
+Name="RoundRobin"
+
+#LocalityAware 策略的专属配置
+#[Strategy.LocalityAware]
+#SlidingWindowPeriod = 60
+
+# 资源定位配置必须有且只有一项
+# 资源定位: 使用 BNS
+[Resource.BNS]
+BNSName = "group.bdrp-BdrpStorageOffline-proxy.redis.all"
+
+# [Resource.Manual]
+# [[Resource.Manual.default]]
+# Host = "127.0.0.1"
+# Port = 6379
+
+# [Resource.Manual]
+# [[Resource.Manual.default]]
+# Host = "10.252.21.16"
+# Port = 6379
+
+# redis必要配置, 这一项必须要有
+# 连接池使用go-redis带的连接池, 每个ip+端口分配一个连接池, PoolSizePerIP和MinIdleConnsPerIP根据业务与实例进行配置
+# 比如bns提供proxy的实例有10个, 那么PoolSize = 10 * PoolSizePerIP, IdleConns = 10 * MinIdleConnsPerIP
+[Redis]
+# DB 可选
+DB = 0
+# PoolSizePerIP 每个实例pool连接容量, 可选
+PoolSizePerIP	= 10
+# MinIdleConnsPerIP 每个实例pool初始连接个数, 可选
+MinIdleConnsPerIP	= 5

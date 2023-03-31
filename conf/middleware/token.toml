@@ -1,0 +1,10 @@
+# token.toml 接口token校验配置
+
+# 是否启用频控，默认为false，必选
+Enable = false
+
+# Token
+Token = "ginlib"
+
+# 不走token校验的特殊接口
+NoTokenPath = ["/ginlib"]

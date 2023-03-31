@@ -1,0 +1,28 @@
+# rds_lib.toml: redis db
+
+# Service Name
+Name = "rds_lib"
+
+## not necessary
+# ms
+WriteTimeOut = 1000
+# ms
+ReadTimeOut = 500
+# Retry num: total num of req = Retry + 1; database/sql has 2 intrinsic retry
+Retry = 2
+
+# Resource Ip Port
+[Resource.Manual]
+Host = "rm-bp17lvq049ft85ht1ao.mysql.rds.aliyuncs.com"
+Port = 6379
+
+# redis必要配置, 这一项必须要有
+# 连接池使用go-redis带的连接池, 每个ip+端口分配一个连接池, PoolSizePerIP和MinIdleConnsPerIP根据业务与实例进行配置
+# 比如bns提供proxy的实例有10个, 那么PoolSize = 10 * PoolSizePerIP, IdleConns = 10 * MinIdleConnsPerIP
+[Redis]
+# DB 可选
+DB = 0
+# PoolSizePerIP 每个实例pool连接容量, 可选
+PoolSizePerIP	= 10
+# MinIdleConnsPerIP 每个实例pool初始连接个数, 可选
+MinIdleConnsPerIP	= 5

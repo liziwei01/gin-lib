@@ -1,0 +1,10 @@
+# sign.toml 接口md5签名校验配置
+
+# 是否启用频控，默认为false，必选
+Enable = false
+
+# 不走签名校验的特殊sign
+Sign = "gin-lib"
+
+# 不走签名校验的特殊接口
+NoSignPath = ["/ginlib"]

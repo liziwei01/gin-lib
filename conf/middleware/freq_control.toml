@@ -1,0 +1,23 @@
+# freq_control.toml 接口频控配置
+
+# 是否启用频控，默认为false，必选
+Enable = false
+
+# 频控类型，默认为0，必选
+# GetFreqControl
+GetLimit = 10
+
+# PostFreqControl
+PostLimit = 1
+
+# PutFreqControl
+PutLimit = 1
+
+# DeleteFreqControl
+DeleteLimit = 1
+
+# EmailFreqControl
+EmailLimit = 1
+
+# IPFreqControl
+IpLimit = 10

@@ -1,0 +1,10 @@
+# oss_lib_image.toml: oss storage
+
+# Service Name
+Name = "oss_lib"
+
+# OSS
+[OSS]
+Endpoint = "http://oss-cn-shenzhen.aliyuncs.com"
+AccessKeyID = "id_lib"
+AccessKeySecret = "id_sec"
