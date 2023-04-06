@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-03 16:04:06
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-03-30 13:12:46
+ * @LastEditTime: 2023-04-06 17:10:23
  * @Description: 读取配置文件, 初始化路由
  */
 package bootstrap
@@ -40,7 +40,7 @@ func Setup() (*AppServer, error) {
 	}
 	env.Default = appServer.Config.Env
 	appServer.Ctx, appServer.Cancel = context.WithCancel(context.Background())
-	InitMust(appServer.Ctx)
+	InitMust(context.WithValue(appServer.Ctx, "APPName", appServer.Config.APPName))
 	appServer.Handler = InitHandler(appServer)
 
 	return appServer, nil

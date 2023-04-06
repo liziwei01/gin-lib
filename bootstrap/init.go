@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 22:06:10
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-04-06 17:05:32
+ * @LastEditTime: 2023-04-06 17:11:40
  * @Description: file content
  */
 package bootstrap
@@ -22,7 +22,7 @@ func InitMust(ctx context.Context) {
 }
 
 func InitLog(ctx context.Context) {
-	logit.Init(ctx, "gin-lib")
+	logit.Init(ctx, ctx.Value("APPName").(string))
 }
 
 func InitMiddleware(ctx context.Context) {
