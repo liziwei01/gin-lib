@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 22:06:10
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-24 23:43:27
+ * @LastEditTime: 2023-04-06 17:05:32
  * @Description: file content
  */
 package bootstrap
@@ -22,7 +22,7 @@ func InitMust(ctx context.Context) {
 }
 
 func InitLog(ctx context.Context) {
-	logit.Init(ctx, "github.com/liziwei01/gin-lib")
+	logit.Init(ctx, "gin-lib")
 }
 
 func InitMiddleware(ctx context.Context) {
