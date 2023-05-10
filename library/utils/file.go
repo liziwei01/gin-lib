@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-20 17:31:44
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-20 17:32:49
+ * @LastEditTime: 2023-04-13 21:39:13
  * @Description: file content
  */
 package utils
@@ -39,13 +39,13 @@ func (u *UFile) GetFileBytes(fileHeader *multipart.FileHeader) ([]byte, error) {
 	return res, nil
 }
 
-//IsExist  判断文件夹/文件是否存在  存在返回 true
+// IsExist  判断文件夹/文件是否存在  存在返回 true
 func (u *UFile) IsExist(f string) bool {
 	_, err := os.Stat(BaseDir + f)
 	return err == nil || os.IsExist(err)
 }
 
-//CreateDir  文件夹创建
+// CreateDir  文件夹创建
 func (u *UFile) CreateDir(path string) error {
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {

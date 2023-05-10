@@ -27,7 +27,7 @@ prepare-dep:
 #	git config --global http.sslVerify false
 
 set-env:
-$(GO) env -w GOPROXY="https://proxy.golang.org,direct"
+	$(GO) env -w GOPROXY="https://proxy.golang.org,direct"
 #	$(GO) env -w GOPROXY="https://goproxy.io,direct"
 
 # make compile

@@ -13,7 +13,7 @@ Retry = 2
 
 # Resource Ip Port
 [Resource.Manual]
-Host = "rm-bp17lvq049ft85ht1ao.mysql.rds.aliyuncs.com"
+Host = "localhost"
 Port = 3306
 
 # mysql
