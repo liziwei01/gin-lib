@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-03 16:04:06
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-10 20:34:59
+ * @LastEditTime: 2023-05-13 05:08:21
  * @Description: app
  */
 
@@ -23,7 +23,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var DefaultWriter io.Writer = os.Stdout
+const (
+	appConfCertsDir = "certs"
+)
+
+var (
+	DefaultWriter io.Writer = os.Stdout
+	CrtFileName             = "server.crt"
+	KeyFileName             = "server.key"
+)
 
 // Config app's conf
 // default conf/app.toml
@@ -103,4 +111,14 @@ func (app *App) Start() error {
 	fmt.Fprintf(DefaultWriter, "[APP START] Listening and serving HTTP on %s\n", app.config.HTTPServer.Listen)
 	// start distribute routers
 	return app.server.ListenAndServe()
+}
+
+// Start start the https service
+func (app *App) StartTLS() error {
+	// start listening to port
+	fmt.Fprintf(DefaultWriter, "[APP START] Listening and serving HTTPS on %s\n", app.config.HTTPServer.Listen)
+	// start distribute routers
+	certFile := filepath.Join(app.config.Env.ConfDir(), appConfCertsDir, CrtFileName)
+	keyFile := filepath.Join(app.config.Env.ConfDir(), appConfCertsDir, KeyFileName)
+	return app.server.ListenAndServeTLS(certFile, keyFile)
 }

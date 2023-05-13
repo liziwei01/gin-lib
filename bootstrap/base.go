@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-03 16:04:06
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-04-06 17:10:23
+ * @LastEditTime: 2023-05-13 05:07:44
  * @Description: 读取配置文件, 初始化路由
  */
 package bootstrap
@@ -71,4 +71,11 @@ func (appServer *AppServer) Start() {
 	defer appServer.Cancel()
 	app := NewApp(appServer.Ctx, appServer.Config, appServer.Handler)
 	log.Fatalln("server exit:", app.Start())
+}
+
+// Start 启动https服务器.
+func (appServer *AppServer) StartTLS() {
+	defer appServer.Cancel()
+	app := NewApp(appServer.Ctx, appServer.Config, appServer.Handler)
+	log.Fatalln("server exit:", app.StartTLS())
 }

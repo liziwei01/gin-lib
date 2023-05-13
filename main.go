@@ -1,7 +1,7 @@
 /*
  * @Author: liziwei01
  * @Date: 2021-04-19 15:00:00
- * @LastEditTime: 2023-04-13 21:41:15
+ * @LastEditTime: 2023-05-13 05:01:37
  * @LastEditors: liziwei01
  * @Description: main
  * @FilePath: /github.com/liziwei01/gin-lib/main.go
@@ -21,12 +21,12 @@ import (
  * @return {*}
  */
 func main() {
-	app, err := bootstrap.Setup()
+	appServer, err := bootstrap.Setup()
 	if err != nil {
 		log.Fatalln(err)
 	}
 	// 注册接口路由
-	httpapi.InitRouters(app.Handler)
+	httpapi.InitRouters(appServer.Handler)
 
-	app.Start()
+	appServer.Start()
 }
