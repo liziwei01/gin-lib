@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-06-28 01:08:34
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-07-02 20:15:37
+ * @LastEditTime: 2023-10-28 14:10:31
  * @Description: file content
  */
 package utils
@@ -523,7 +523,7 @@ func (ue *UEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, er
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, fmt.Errorf(" private key error! ")
+		return nil, fmt.Errorf("private key error! ")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -542,7 +542,7 @@ func (ue *UEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, err
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, fmt.Errorf(" private key error! ")
+		return nil, fmt.Errorf("private key error! ")
 	}
 
 	// 解析PKCS1格式的私钥

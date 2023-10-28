@@ -28,7 +28,7 @@ func (c *client) Send(ctx context.Context, to, subject, body string) error {
 
 	err = dialer.DialAndSend(msg)
 	if err != nil {
-		logit.Logger.Error("send email failed: %s", err.Error())
+		logit.Logger.Warn("send email failed: %s", err.Error())
 		return err
 	}
 

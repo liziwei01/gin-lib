@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-21 22:35:37
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-03-30 13:06:21
+ * @LastEditTime: 2023-10-28 13:54:29
  * @Description: file content
  */
 package redis
@@ -61,7 +61,7 @@ func TestExists(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if exists {
+	if exists != 0 {
 		t.Error(exists)
 	}
 }

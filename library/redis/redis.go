@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-21 22:36:04
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-04-24 21:37:52
+ * @LastEditTime: 2023-10-28 13:53:18
  * @Description: file content
  */
 package redis
@@ -12,8 +12,6 @@ import (
 	"time"
 
 	"github.com/liziwei01/gin-lib/library/logit"
-
-	"github.com/gogf/gf/util/gconv"
 )
 
 func (c *client) Get(ctx context.Context, key string) (value string, err error) {
@@ -23,10 +21,10 @@ func (c *client) Get(ctx context.Context, key string) (value string, err error) 
 	}
 	ret, err := db.Get(key).Result()
 	if err != nil {
-		logit.Logger.Error("redis get error: %s", err)
+		logit.Logger.Warn("[Redis] [Get] [requestID]=%d, [key]=%s, [err]=%s", ctx.Value("requestID"), key, err.Error())
 		return "", err
 	}
-	logit.Logger.Info("redis get key: %s, value: %s", key, ret)
+	logit.Logger.Info("[Redis] [Get] [requestID]=%d, [key]=%s, [value]=%s", ctx.Value("requestID"), key, ret)
 	return ret, nil
 }
 
@@ -41,10 +39,10 @@ func (c *client) Set(ctx context.Context, key string, value string, expireTime .
 	}
 	err = db.Set(key, value, exp).Err()
 	if err != nil {
-		logit.Logger.Error("redis set error: %s", err)
+		logit.Logger.Warn("[Redis] [Set] [requestID]=%d, [key]=%s, [value]=%s, [err]=%s", ctx.Value("requestID"), key, value, err.Error())
 		return err
 	}
-	logit.Logger.Info("redis set key: %s, value: %s, expireTime: %d", key, value, exp)
+	logit.Logger.Info("[Redis] [Set] [requestID]=%d, [key]=%s, [value]=%s, [expire]=%d", ctx.Value("requestID"), key, value, exp)
 	return err
 }
 
@@ -55,23 +53,23 @@ func (c *client) Del(ctx context.Context, keys ...string) error {
 	}
 	err = db.Del(keys...).Err()
 	if err != nil {
-		logit.Logger.Error("redis del error: %s", err)
+		logit.Logger.Warn("[Redis] [Del] [requestID]=%d, [key]=%s, [err]=%s", ctx.Value("requestID"), keys, err.Error())
 		return err
 	}
-	logit.Logger.Info("redis del key: %s", keys)
+	logit.Logger.Info("[Redis] [Del] [requestID]=%d, [key]=%s", ctx.Value("requestID"), keys)
 	return err
 }
 
-func (c *client) Exists(ctx context.Context, keys ...string) (bool, error) {
+func (c *client) Exists(ctx context.Context, keys ...string) (int64, error) {
 	db, err := c.connect(ctx)
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 	ret, err := db.Exists(keys...).Result()
 	if err != nil {
-		logit.Logger.Error("redis exists error: %s", err)
-		return false, err
+		logit.Logger.Warn("[Redis] [Exists] [requestID]=%d, [keys]=%#v, [err]=%s", ctx.Value("requestID"), keys, err.Error())
+		return 0, err
 	}
-	logit.Logger.Info("redis exists key: %s, ret: %d", keys, ret)
-	return gconv.Bool(ret), nil
+	logit.Logger.Info("[Redis] [Exists] [requestID]=%d, [keys]=%#v, [value]=%s", ctx.Value("requestID"), keys, ret)
+	return ret, nil
 }

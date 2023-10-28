@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 22:06:10
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-04-06 17:11:40
+ * @LastEditTime: 2023-10-28 13:22:11
  * @Description: file content
  */
 package bootstrap
@@ -11,6 +11,7 @@ import (
 	"context"
 
 	"github.com/liziwei01/gin-lib/library/logit"
+	"github.com/liziwei01/gin-lib/library/request"
 	"github.com/liziwei01/gin-lib/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,8 @@ func InitHandler(app *AppServer) *gin.Engine {
 	handler := gin.New()
 	// 注册log recover中间件
 	ginRecovery := gin.Recovery()
+	idGenerator := request.RequestIDMiddleware()
 	baiduLogger := logit.LogitMiddleware()
-	handler.Use(ginRecovery, baiduLogger)
+	handler.Use(ginRecovery, idGenerator, baiduLogger)
 	return handler
 }

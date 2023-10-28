@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-20 17:31:44
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-04-13 21:39:13
+ * @LastEditTime: 2023-10-28 14:08:21
  * @Description: file content
  */
 package utils
@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"os"
 	"strings"
@@ -32,7 +31,7 @@ func (u *UFile) GetFileBytes(fileHeader *multipart.FileHeader) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	res, err := ioutil.ReadAll(file)
+	res, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}
@@ -97,6 +96,6 @@ func (u *UFile) ReadFile(filename string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	byteStream, err := ioutil.ReadAll(file)
+	byteStream, err := io.ReadAll(file)
 	return byteStream, err
 }

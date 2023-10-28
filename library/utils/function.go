@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-06-28 01:12:49
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-06-28 01:12:50
+ * @LastEditTime: 2023-10-28 14:11:07
  * @Description: file content
  */
 package utils
@@ -58,8 +58,7 @@ func shaXByte(str []byte, x uint16) []byte {
 		h = sha512.New()
 		break
 	default:
-		fmt.Print("[shaXByte] x must be in [1, 256, 512]")
-		return nil
+		panic("[shaXByte] x must be in [1, 256, 512]")
 	}
 
 	h.Write(str)
@@ -147,20 +146,20 @@ func getMethod(t interface{}, method string) reflect.Value {
 func ValidFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
 	vf = reflect.ValueOf(f)
 	if vf.Kind() != reflect.Func {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[validFunc] %v is not the function", f)
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %v is not the function", f)
 	}
 
 	tf := vf.Type()
 	_len := len(args)
 	if tf.NumIn() != _len {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[validFunc] %d number of the argument is incorrect", _len)
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %d number of the argument is incorrect", _len)
 	}
 
 	vargs = make([]reflect.Value, _len)
 	for i := 0; i < _len; i++ {
 		typ := tf.In(i).Kind()
 		if (typ != reflect.Interface) && (typ != reflect.TypeOf(args[i]).Kind()) {
-			return reflect.ValueOf(nil), nil, fmt.Errorf("[validFunc] %d-td argument`s type is incorrect", i+1)
+			return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %d-td argument`s type is incorrect", i+1)
 		}
 		vargs[i] = reflect.ValueOf(args[i])
 	}

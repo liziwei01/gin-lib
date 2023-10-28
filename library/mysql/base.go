@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-04-12 15:19:01
+ * @LastEditTime: 2023-10-28 13:44:03
  * @Description: file content
  */
 package mysql
@@ -53,7 +53,7 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 		return client, nil
 	}
 
-	logit.Logger.Error("mysql client init err: %s", err.Error())
+	logit.Logger.Warn("[MySQL] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
 
 	return nil, err
 }
@@ -96,5 +96,5 @@ func initClient(serviceName string) (Client, error) {
 		client := New(config)
 		return client, nil
 	}
-	return nil, fmt.Errorf("mysql conf not exist")
+	return nil, fmt.Errorf("conf file not exist")
 }

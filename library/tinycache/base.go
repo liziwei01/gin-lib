@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-05-09 23:48:58
+ * @LastEditTime: 2023-10-28 13:54:41
  * @Description: file content
  */
 package tinycache
@@ -22,7 +22,7 @@ import (
 const (
 	// tinycache conf file path
 	tinycachePath = "/servicer/"
-	prefix    = ".toml"
+	prefix        = ".toml"
 )
 
 var (
@@ -53,7 +53,7 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 		return client, nil
 	}
 
-	logit.Logger.Error("tinycache client init err: %s", err.Error())
+	logit.Logger.Warn("[TinyCache] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
 
 	return nil, err
 }
@@ -96,5 +96,5 @@ func initClient(serviceName string) (Client, error) {
 		client := New(config)
 		return client, nil
 	}
-	return nil, fmt.Errorf("tinycache conf not exist")
+	return nil, fmt.Errorf("conf file not exist")
 }

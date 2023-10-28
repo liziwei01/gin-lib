@@ -14,10 +14,10 @@ func (dao *client) Query(ctx context.Context, tableName string, where map[string
 	builder := NewSelectBuilder(tableName, where, columns)
 	err := QueryWithBuilder(ctx, dao, builder, data)
 	if err != nil {
-		logit.Logger.Error("mysql.Query error: %+v", err)
+		logit.Logger.Warn("[MySQL] [Query] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return err
 	}
-	logit.Logger.Info("mysql.Query success")
+	logit.Logger.Info("[MySQL] [Query] [requestID]=%d success", ctx.Value("requestID"))
 	return nil
 }
 
@@ -25,10 +25,10 @@ func (dao *client) Insert(ctx context.Context, tableName string, data []map[stri
 	builder := NewInsertBuilder(tableName, data, insertCommon)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.Insert error: %+v", err)
+		logit.Logger.Warn("[MySQL] [Insert] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.Insert success")
+	logit.Logger.Info("[MySQL] [Insert] [requestID]=%d success", ctx.Value("requestID"))
 	return res, nil
 }
 
@@ -36,10 +36,10 @@ func (dao *client) InsertIgnore(ctx context.Context, tableName string, data []ma
 	builder := NewInsertBuilder(tableName, data, insertIgnore)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.InsertIgnore error: %+v", err)
+		logit.Logger.Warn("[MySQL] [InsertIgnore] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.InsertIgnore success")
+	logit.Logger.Info("[MySQL] [InsertIgnore] [requestID]=%d success", ctx.Value("requestID"))
 	return res, nil
 }
 
@@ -47,10 +47,10 @@ func (dao *client) InsertReplace(ctx context.Context, tableName string, data []m
 	builder := NewInsertBuilder(tableName, data, insertReplace)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.InsertReplace error: %+v", err)
+		logit.Logger.Warn("[MySQL] [InsertReplace] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.InsertReplace success")
+	logit.Logger.Info("[MySQL] [InsertReplace] [requestID]=%d success", ctx.Value("requestID"))
 	return res, nil
 }
 
@@ -58,10 +58,10 @@ func (dao *client) InsertOnDuplicate(ctx context.Context, tableName string, data
 	builder := NewInsertBuilder(tableName, data, insertOnDuplicate, update)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.InsertOnDuplicate error: %+v", err)
+		logit.Logger.Warn("[MySQL] [InsertOnDuplicate] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.InsertOnDuplicate success")
+	logit.Logger.Info("[MySQL] [InsertOnDuplicate] [requestID]=%d success", ctx.Value("requestID"))
 	return res, nil
 }
 
@@ -69,10 +69,10 @@ func (dao *client) Update(ctx context.Context, tableName string, where map[strin
 	builder := NewUpdateBuilder(tableName, where, update)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.Update error: %+v", err)
+		logit.Logger.Warn("[MySQL] [Update] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.Update success")
+	logit.Logger.Info("[MySQL] [Update] [requestID]=%d success", ctx.Value("requestID"))
 	return res, nil
 }
 
@@ -80,10 +80,10 @@ func (dao *client) Delete(ctx context.Context, tableName string, where map[strin
 	builder := NewDeleteBuilder(tableName, where)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.Delete error: %+v", err)
+		logit.Logger.Warn("[MySQL] [Delete] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.Delete success")
+	logit.Logger.Info("[MySQL] [Delete] success")
 	return res, nil
 }
 
@@ -91,10 +91,10 @@ func (dao *client) ExecRaw(ctx context.Context, sql string, args ...interface{})
 	builder := NewRawBuilder(sql, args)
 	res, err := ExecWithBuilder(ctx, dao, builder)
 	if err != nil {
-		logit.Logger.Error("mysql.ExecRaw error: %+v", err)
+		logit.Logger.Warn("[MySQL] [ExecRaw] [requestID]=%d, [err]=%s", ctx.Value("requestID"), err.Error())
 		return nil, err
 	}
-	logit.Logger.Info("mysql.ExecRaw success")
+	logit.Logger.Info("[MySQL] [ExecRaw] success")
 	return res, nil
 }
 

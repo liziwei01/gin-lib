@@ -53,7 +53,7 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 		return client, nil
 	}
 
-	logit.Logger.Error("email client init err: %s", err.Error())
+	logit.Logger.Warn("email client init err: %s", err.Error())
 
 	return nil, err
 }

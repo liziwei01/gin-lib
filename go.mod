@@ -3,11 +3,13 @@ module github.com/liziwei01/gin-lib
 go 1.20
 
 require (
+	github.com/360EntSecGroup-Skylar/excelize v1.4.1
 	github.com/BurntSushi/toml v0.3.1
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/baidu/go-lib v0.0.0-20210316014414-55daa983069e
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/didi/gendry v1.8.0
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.6.0
@@ -35,6 +37,7 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.27.6 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect

@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-09 19:26:42
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-04-17 15:40:47
+ * @LastEditTime: 2023-10-28 13:44:05
  * @Description: file content
  */
 package mysql
@@ -209,6 +209,6 @@ func log(ctx context.Context, c Client, cond string, values []interface{}) {
 		query = query[0:c.sqlloglen()]
 	}
 	if len(query) != 0 {
-		logit.Logger.Info(query)
+		logit.Logger.Info("[MySQL] [requestID]=%d, [query]=%s", ctx.Value("requestID"), query)
 	}
 }
