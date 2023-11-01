@@ -1,71 +1,68 @@
 /*
  * @Author: liziwei01
- * @Date: 2022-03-24 23:28:35
+ * @Date: 2023-09-13 16:55:50
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:43:48
- * @Description: 日志中间件打印每次接口访问的请求信息，重写gin的日志格式供中间件使用
+ * @LastEditTime: 2023-11-01 10:10:05
+ * @Description: 基于gin日志中间件重写，打印每次接口访问的请求信息
  */
 package logit
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-// LogitMiddleware instance a Logger middleware with baidu/go-lib/log/log4go.
-func LogitMiddleware() gin.HandlerFunc {
-	formatter := func(param gin.LogFormatterParams) string {
-		if param.Latency > time.Minute {
-			param.Latency = param.Latency.Truncate(time.Second)
-		}
-		return fmt.Sprintf("[GIN] [requestID]=%d, [code]=%3d, [latency]=%v, [ip]=%s, [method]=%s, [path]=%#v, [err]=%s",
-			param.Keys["requestID"],
-			param.StatusCode,
-			param.Latency,
-			param.ClientIP,
-			param.Method,
-			param.Path,
-			param.ErrorMessage,
-		)
-	}
+// 创建一个全局的 sync.Pool
+var fieldsPool = sync.Pool{
+	New: func() interface{} {
+		// 这个函数会在获取一个新的对象时调用，如果 Pool 中没有可用的对象
+		return make([]Field, 0, 10) // 预分配10个元素的空间
+	},
+}
 
-	return func(c *gin.Context) {
+// LogitMiddleware instance a Logger middleware
+func LogitMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
 		// Start timer
 		start := time.Now()
-		path := c.Request.URL.Path
-		raw := c.Request.URL.RawQuery
+		path := ctx.Request.URL.Path
+		raw := ctx.Request.URL.RawQuery
+
+		requestID := ctx.Request.Header.Get("X-Request-ID")
+		if requestID == "" {
+			requestID = NewRequestID()
+		}
+		ctx.Writer.Header().Set("X-Request-ID", requestID)
+		SetRequestID(ctx, requestID)
 
 		// Process request
-		c.Next()
-
-		param := gin.LogFormatterParams{
-			Request: c.Request,
-			Keys:    c.Keys,
-		}
-
-		// Stop timer
-		param.TimeStamp = time.Now()
-		param.Latency = param.TimeStamp.Sub(start)
-
-		param.ClientIP = c.ClientIP()
-		param.Method = c.Request.Method
-		param.StatusCode = c.Writer.Status()
-		param.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
-
-		param.BodySize = c.Writer.Size()
+		ctx.Next()
 
 		if raw != "" {
 			path = path + "?" + raw
 		}
 
-		param.Path = path
+		// 从 Pool 中获取一个 fields 对象
+		fields := fieldsPool.Get().([]Field)
+		defer fieldsPool.Put(fields) // 确保在函数结束时将 fields 对象放回 Pool
 
-		if param.ErrorMessage == "" {
-			Logger.Info(formatter(param))
-		} else if param.ErrorMessage != "" {
-			Logger.Error(formatter(param))
+		fields[0] = String("requestID", requestID)
+		fields[1] = Int("statusCode", ctx.Writer.Status())
+		fields[2] = Duration("latency", time.Now().Sub(start))
+		fields[3] = String("ip", ctx.ClientIP())
+		fields[4] = String("method", ctx.Request.Method)
+		fields[5] = String("path", path)
+
+		err := ctx.Errors.ByType(gin.ErrorTypePrivate).String()
+		fields[6] = Error("err", fmt.Errorf(err))
+
+		if err == "" {
+			SvrLogger.Notice(ctx, err, fields...)
+		} else {
+			SvrLogger.Warning(ctx, err, fields...)
 		}
 	}
 }

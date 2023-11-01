@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-03 16:04:46
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 14:20:55
+ * @LastEditTime: 2023-11-01 09:11:02
  * @Description: 路由分发
  */
 
@@ -36,13 +36,12 @@ func InitRouters(handler *gin.Engine) {
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Hello! THis is gin-lib. Welcome!")
 
-		logit.Logger.Fine("safe router fine test")
-		logit.Logger.Debug("safe router debug test")
-		logit.Logger.Trace("safe router trace test")
-		logit.Logger.Info("safe router info test")
-		logit.Logger.Warn("safe router warn test")
-		logit.Logger.Warn("safe router error test")
-		logit.Logger.Critical("safe router critical test")
-		// panic("safe router panic test")
+		logit.SvrLogger.Debug(ctx, "safe router debug test", logit.String("fieldKey", "fieldValue"))
+		logit.SvrLogger.Trace(ctx, "safe router trace test", logit.String("fieldKey", "fieldValue"))
+		logit.SvrLogger.Notice(ctx, "safe router notice test", logit.String("fieldKey", "fieldValue"))
+		logit.SvrLogger.Warning(ctx, "safe router warning test", logit.String("fieldKey", "fieldValue"))
+		logit.SvrLogger.Error(ctx, "safe router error test", logit.String("fieldKey", "fieldValue"))
+		logit.SvrLogger.Fatal(ctx, "safe router fatal test", logit.String("fieldKey", "fieldValue"))
+		panic("safe router panic test")
 	})
 }

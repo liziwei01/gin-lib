@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:45:06
+ * @LastEditTime: 2023-11-01 11:19:13
  * @Description: file content
  */
 package oss
@@ -16,13 +16,12 @@ import (
 
 	"github.com/liziwei01/gin-lib/library/conf"
 	"github.com/liziwei01/gin-lib/library/env"
-	"github.com/liziwei01/gin-lib/library/logit"
 )
 
 const (
 	// oss conf file path
 	ossPath = "/servicer/"
-	prefix  = ".toml"
+	suffix  = ".toml"
 )
 
 var (
@@ -52,9 +51,6 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 	if client != nil {
 		return client, nil
 	}
-
-	logit.Logger.Warn("[OSS] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
-
 	return nil, err
 }
 
@@ -87,7 +83,7 @@ func setClient(serviceName string) (Client, error) {
  */
 func initClient(serviceName string) (Client, error) {
 	var config *Config
-	fileAbs, err := filepath.Abs(filepath.Join(configPath, ossPath, serviceName+prefix))
+	fileAbs, err := filepath.Abs(filepath.Join(configPath, ossPath, serviceName+suffix))
 	if err != nil {
 		return nil, err
 	}

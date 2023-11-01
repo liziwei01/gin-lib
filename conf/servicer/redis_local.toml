@@ -23,14 +23,7 @@ Name="RoundRobin"
 #SlidingWindowPeriod = 60
 
 # 资源定位配置必须有且只有一项
-# 资源定位: 使用 BNS
-[Resource.BNS]
-BNSName = "group.bdrp-BdrpStorageOffline-proxy.redis.all"
 
-# [Resource.Manual]
-# [[Resource.Manual.default]]
-# Host = "127.0.0.1"
-# Port = 6379
 
 # [Resource.Manual]
 # [[Resource.Manual.default]]

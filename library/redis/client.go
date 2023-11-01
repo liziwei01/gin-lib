@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 13:52:11
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:53:59
+ * @LastEditTime: 2023-10-29 11:33:44
  * @Description: file content
  */
 package redis
@@ -59,9 +59,7 @@ func New(config *Config) Client {
 func (c *client) connect(ctx context.Context) (*r.Client, error) {
 	var err error
 	if c.db != nil {
-		if err = c.db.Ping().Err(); err == nil {
-			return c.db, nil
-		}
+		return c.db, nil
 	}
 	mu.Lock()
 	defer mu.Unlock()
@@ -76,12 +74,14 @@ func (c *client) open() (*r.Client, error) {
 	)
 	// 内含 retry 2
 	db = r.NewClient(&r.Options{
-		Addr:     c.host() + ":" + c.port(),
-		Password: c.password(),
-		DB:       c.dbname(),
-		WriteTimeout: time.Duration(c.writeTimeOut())*time.Millisecond,
-		ReadTimeout: time.Duration(c.readTimeOut())*time.Millisecond,
-		MaxRetries: c.conf.Retry,
+		Addr:            c.host() + ":" + c.port(),
+		Password:        c.password(),
+		DB:              c.dbname(),
+		WriteTimeout:    time.Duration(c.writeTimeOut()) * time.Millisecond,
+		ReadTimeout:     time.Duration(c.readTimeOut()) * time.Millisecond,
+		MaxRetries:      c.conf.Retry,
+		MinRetryBackoff: 8 * time.Millisecond,
+		MaxRetryBackoff: 512 * time.Millisecond,
 	})
 	return db, err
 }

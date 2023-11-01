@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:44:03
+ * @LastEditTime: 2023-11-01 11:22:02
  * @Description: file content
  */
 package mysql
@@ -16,7 +16,6 @@ import (
 
 	"github.com/liziwei01/gin-lib/library/conf"
 	"github.com/liziwei01/gin-lib/library/env"
-	"github.com/liziwei01/gin-lib/library/logit"
 )
 
 const (
@@ -52,9 +51,6 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 	if client != nil {
 		return client, nil
 	}
-
-	logit.Logger.Warn("[MySQL] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
-
 	return nil, err
 }
 

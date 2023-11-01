@@ -1,0 +1,51 @@
+# service.toml: 服务日志配置文件
+
+# File Name
+FileName="log/service/service.log"
+
+# 日志切分规则，可选参数，默认为1hour
+# 可选值和切分的文件后缀如下：
+# 1hour -> .2020072714
+# no 不切分
+# 1day -> .20200727
+# 1min -> .202007271452
+# 5min -> .202007271450
+# 10min -> .202007271450
+# 30min -> .202007271430
+# 若上述默认规则不满足，也可以自定义
+RotateRule="1hour"
+
+# 日志文件保留个数，可选参数
+# 默认48个，若为-1，日志文件将不清理
+MaxFileNum=48
+
+# 日志异步队列大小，可选参数
+# 默认值 4096，若为-1，则队列大小为0
+BufferSize=4096
+
+# 日志内容前缀，可选参数
+# 默认为default (包含日志等级、当前时间[精确到秒]、调用位置)
+# eg: NOTICE: 2023-11-01 07:38:36 /Users/liziwei01/Desktop/OpenSource/github.com/gin-lib/library/logit/logit_test.go:30
+# 可选值：default-默认，时间精确到秒，default_nano-时间精确到纳秒、no-无前缀
+# 可通过 RegisterPrefixFunc 自定义
+Prefix="default"
+
+# 在logger 的 Output 执行前执行，可选参数
+# 可以和 Prefix 配合使用
+# 可选值：default-什么都不做，to_body-将level等字段写入日志body
+# 可通过 RegisterBeforeOutputFunc 自定义
+BeforeOutput="to_body"
+
+# 日志编码的对象池名称，可选参数
+# 默认为 default_text（普通文本编码）
+# 可选值：default_json，支持自定义
+EncoderPool="default_text"
+
+# 日志分发规则，可选参数
+[[Dispatch]]
+FileSuffix=""
+Levels=["NOTICE","TRACE"]
+
+[[Dispatch]]
+FileSuffix=".wf"
+Levels=["WARNING","ERROR","FATAL"]

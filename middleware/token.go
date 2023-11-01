@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 23:32:56
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-10 20:52:39
+ * @LastEditTime: 2023-11-01 09:51:13
  * @Description: 接口token校验
  */
 
@@ -20,25 +20,25 @@ import (
 
 // 走接口token校验防止后台get接口被刷.
 func CheckTokenMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		path := c.Request.URL.Path
-		inputToken, ok := utils.Request.Header(c.Request, "token")
+	return func(ctx *gin.Context) {
+		path := ctx.Request.URL.Path
+		inputToken, ok := utils.Request.Header(ctx.Request, "token")
 		if isRealease() != true {
 			// 线下无限制.
-			c.Next()
+			ctx.Next()
 		} else if !tokenConf.Enable {
 			// token校验未开启.
-			c.Next()
+			ctx.Next()
 		} else if checkNoTokenPath(path) == true {
 			// 不需要token校验的接口.
-			c.Next()
+			ctx.Next()
 		} else if !ok || tokenConf.Token != inputToken {
 			// token校验失败.
-			response.StdTokenCheckFailed(c)
-			c.Abort()
+			response.StdTokenCheckFailed(ctx)
+			ctx.Abort()
 		} else {
 			// token校验成功.
-			c.Next()
+			ctx.Next()
 		}
 	}
 }

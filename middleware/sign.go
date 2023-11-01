@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-05 15:45:31
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-06-30 05:22:13
+ * @LastEditTime: 2023-11-01 09:51:03
  * @Description: file content
  */
 package middleware
@@ -18,28 +18,28 @@ import (
 
 // 走接口签名校验防止接口被刷.
 func CheckSignMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		path := c.Request.URL.Path
+	return func(ctx *gin.Context) {
+		path := ctx.Request.URL.Path
 		if isRealease() != true {
 			// 线下无限制.
-			c.Next()
+			ctx.Next()
 			return
 		} else if !signConf.Enable {
 			// 签名校验未开启.
-			c.Next()
+			ctx.Next()
 			return
 		} else if checkNoSignPath(path) == true {
 			// 不需要sign校验的接口.
-			c.Next()
+			ctx.Next()
 			return
-		} else if !request.CheckSignValid(c.Request, signConf.Sign) {
+		} else if !request.CheckSignValid(ctx.Request, signConf.Sign) {
 			// sign校验失败.
-			response.StdSignCheckFailed(c)
-			c.Abort()
+			response.StdSignCheckFailed(ctx)
+			ctx.Abort()
 			return
 		} else {
 			// sign校验成功.
-			c.Next()
+			ctx.Next()
 			return
 		}
 	}

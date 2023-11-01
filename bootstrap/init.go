@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 22:06:10
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:22:11
+ * @LastEditTime: 2023-11-01 09:43:15
  * @Description: file content
  */
 package bootstrap
@@ -23,7 +23,7 @@ func InitMust(ctx context.Context) {
 }
 
 func InitLog(ctx context.Context) {
-	logit.Init(ctx, ctx.Value("APPName").(string))
+	logit.SetServiceLogger(ctx)
 }
 
 func InitMiddleware(ctx context.Context) {
@@ -37,7 +37,7 @@ func InitHandler(app *AppServer) *gin.Engine {
 	// 注册log recover中间件
 	ginRecovery := gin.Recovery()
 	idGenerator := request.RequestIDMiddleware()
-	baiduLogger := logit.LogitMiddleware()
-	handler.Use(ginRecovery, idGenerator, baiduLogger)
+	libLogger := logit.LogitMiddleware()
+	handler.Use(ginRecovery, idGenerator, libLogger)
 	return handler
 }

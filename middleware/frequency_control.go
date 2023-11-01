@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 21:44:14
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-03-30 23:11:56
+ * @LastEditTime: 2023-11-01 09:50:33
  * @Description: 频控中间件
  */
 package middleware
@@ -15,10 +15,10 @@ import (
 )
 
 func GetFrequencyControlMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ctx *gin.Context) {
 		if !freqControlConf.Enable {
 			// 不限制.
-			c.Next()
+			ctx.Next()
 		} else {
 			// setup a 1 ops/s rate limiter.
 			limiter := rate.NewLimiter(rate.Every(time.Second), 2, "a-sample-operation")
@@ -32,19 +32,19 @@ func GetFrequencyControlMiddleware() gin.HandlerFunc {
 }
 
 func PostFrequencyControlMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ctx *gin.Context) {
 		if !freqControlConf.Enable {
 			// 不限制.
-			c.Next()
+			ctx.Next()
 		}
 	}
 }
 
 func MailFrequencyControlMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ctx *gin.Context) {
 		if !freqControlConf.Enable {
 			// 不限制.
-			c.Next()
+			ctx.Next()
 		}
 	}
 }

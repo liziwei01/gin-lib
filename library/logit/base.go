@@ -2,35 +2,96 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:40:52
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 09:39:15
- * @Description: 使用百度的log库
+ * @LastEditTime: 2023-10-31 14:43:00
+ * @Description: 提供默认Service Logger
  */
 package logit
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"path/filepath"
+	"sync"
 
-	lib "github.com/baidu/go-lib/log"
-	"github.com/baidu/go-lib/log/log4go"
 	"github.com/liziwei01/gin-lib/library/env"
 )
 
-var (
-	Logger      log4go.Logger  // 日志对象
-	levelStr    = "INFO"       // levelStr以上级别的日志都会打印到stdout
-	logDir      = env.LogDir() // 日志文件存放目录
-	hasStdOut   = true         // 是否打印到stdout
-	when        = "H"          // 每小时生成一个日志文件
-	backupCount = 5            // 保留5个日志文件
+const (
+	// logPath log 配置文件路径
+	logPath = "logit/"
+	suffix  = ".toml"
+	svrName = "service"
 )
 
-/**
- * @description: all the log are recorded under ./log
- * @param {string} programName
- * @return {*}
- */
-func Init(ctx context.Context, programName string) error {
+var (
+	// conf file root path
+	configPath = env.Default.ConfDir()
+	loggers    map[string]Logger
+	// SvrLogger 默认service log
+	SvrLogger Logger
+	initMux sync.Mutex
+)
+
+func init() {
+	loggers = make(map[string]Logger)
+}
+
+// SetServiceLogger 设置service logger 需要在程序启动初始化调用，最先调用
+func SetServiceLogger(ctx context.Context) error {
 	var err error
-	Logger, err = lib.Create(programName, levelStr, logDir, hasStdOut, when, backupCount)
-	return err
+	SvrLogger, err = GetLogger(ctx, svrName)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetLogger 获取 logger
+func GetLogger(ctx context.Context, logName string) (Logger, error) {
+	// 先尝试获取
+	if client, hasSet := loggers[logName]; hasSet {
+		if client != nil {
+			return client, nil
+		}
+	}
+	// 没有则重新设置
+	client, err := SetLogger(ctx, logName)
+	if client != nil {
+		return client, nil
+	}
+	return nil, err
+}
+
+// SetLogger 设置 logger
+func SetLogger(ctx context.Context, logName string) (Logger, error) {
+	// 互斥锁
+	initMux.Lock()
+	defer initMux.Unlock()
+	// 初始化
+	logger, err := initLogger(ctx, logName)
+	if err == nil {
+		// 添加
+		loggers[logName] = logger
+		return logger, nil
+	}
+	// 抛异常
+	// log error
+	return nil, err
+}
+
+// initLogger 初始化日志
+func initLogger(ctx context.Context, logName string) (Logger, error) {
+	fileAbs, err := filepath.Abs(filepath.Join(configPath, logPath, logName+suffix))
+	if err != nil {
+		return nil, err
+	}
+	if _, err := os.Stat(fileAbs); !os.IsNotExist(err) {
+		Logger, err := NewLogger(ctx, OptConfigFile(filepath.Join(logPath, logName+suffix)))
+		if err != nil {
+			return nil, err
+		}
+		return Logger, nil
+	}
+	return nil, fmt.Errorf("log conf not exist")
 }

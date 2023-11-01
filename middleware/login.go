@@ -17,18 +17,18 @@ var (
 )
 
 func CheckLoginMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if ck, err := c.Cookie(GIN_FILE_DOWNLOAD_COOKIE_NAME); err == nil {
+	return func(ctx *gin.Context) {
+		if ck, err := ctx.Cookie(GIN_FILE_DOWNLOAD_COOKIE_NAME); err == nil {
 			ck, err = cookie.Decode(GIN_FILE_DOWNLOAD_COOKIE_NAME, ck)
 			if err != nil {
-				c.AbortWithStatus(401)
+				ctx.AbortWithStatus(401)
 				return
 			}
-			c.Set("email", ck)
-			c.Next()
+			ctx.Set("email", ck)
+			ctx.Next()
 			return
 		} else {
-			c.Redirect(302, "/gin-lib/user/login")
+			ctx.Redirect(302, "/gin-lib/user/login")
 			// c.AbortWithStatus(401)
 			return
 		}

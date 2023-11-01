@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:54:41
+ * @LastEditTime: 2023-11-01 11:18:41
  * @Description: file content
  */
 package tinycache
@@ -16,13 +16,12 @@ import (
 
 	"github.com/liziwei01/gin-lib/library/conf"
 	"github.com/liziwei01/gin-lib/library/env"
-	"github.com/liziwei01/gin-lib/library/logit"
 )
 
 const (
 	// tinycache conf file path
 	tinycachePath = "/servicer/"
-	prefix        = ".toml"
+	suffix        = ".toml"
 )
 
 var (
@@ -52,9 +51,6 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 	if client != nil {
 		return client, nil
 	}
-
-	logit.Logger.Warn("[TinyCache] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
-
 	return nil, err
 }
 
@@ -87,7 +83,7 @@ func setClient(serviceName string) (Client, error) {
  */
 func initClient(serviceName string) (Client, error) {
 	var config *Config
-	fileAbs, err := filepath.Abs(filepath.Join(configPath, tinycachePath, serviceName+prefix))
+	fileAbs, err := filepath.Abs(filepath.Join(configPath, tinycachePath, serviceName+suffix))
 	if err != nil {
 		return nil, err
 	}

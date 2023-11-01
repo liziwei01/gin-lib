@@ -2,16 +2,13 @@
  * @Author: liziwei01
  * @Date: 2022-03-09 19:26:42
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:44:05
+ * @LastEditTime: 2023-11-01 11:21:57
  * @Description: file content
  */
 package mysql
 
 import (
 	"context"
-	"fmt"
-
-	"github.com/liziwei01/gin-lib/library/logit"
 
 	"github.com/didi/gendry/builder"
 )
@@ -204,11 +201,11 @@ func (b *RawBuilder) CompileContext(ctx context.Context, c Client) (string, []in
 }
 
 func log(ctx context.Context, c Client, cond string, values []interface{}) {
-	query := fmt.Sprintf(cond, values...)
-	if c.sqlloglen() != -1 {
-		query = query[0:c.sqlloglen()]
-	}
-	if len(query) != 0 {
-		logit.Logger.Info("[MySQL] [requestID]=%d, [query]=%s", ctx.Value("requestID"), query)
-	}
+	// query := fmt.Sprintf(cond, values...)
+	// if c.sqlloglen() != -1 {
+	// 	query = query[0:c.sqlloglen()]
+	// }
+	// if len(query) != 0 {
+	// 	logit.Logger.Info("[MySQL] [requestID]=%d, [query]=%s", ctx.Value("requestID"), query)
+	// }
 }

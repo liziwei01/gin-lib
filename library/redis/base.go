@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:43:21
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-28 13:46:00
+ * @LastEditTime: 2023-11-01 11:19:03
  * @Description: file content
  */
 package redis
@@ -16,13 +16,12 @@ import (
 
 	"github.com/liziwei01/gin-lib/library/conf"
 	"github.com/liziwei01/gin-lib/library/env"
-	"github.com/liziwei01/gin-lib/library/logit"
 )
 
 const (
 	// mysql conf file path
 	mysqlPath = "/servicer/"
-	prefix    = ".toml"
+	suffix    = ".toml"
 )
 
 var (
@@ -52,9 +51,6 @@ func GetClient(ctx context.Context, serviceName string) (Client, error) {
 	if client != nil {
 		return client, nil
 	}
-
-	logit.Logger.Warn("[Redis] [requestID]=%d, [serviceName]=%s, [err]=client init err: %s", ctx.Value("requestID"), serviceName, err.Error())
-
 	return nil, err
 }
 
@@ -87,7 +83,7 @@ func setClient(serviceName string) (Client, error) {
  */
 func initClient(serviceName string) (Client, error) {
 	var config *Config
-	fileAbs, err := filepath.Abs(filepath.Join(configPath, mysqlPath, serviceName+prefix))
+	fileAbs, err := filepath.Abs(filepath.Join(configPath, mysqlPath, serviceName+suffix))
 	if err != nil {
 		return nil, err
 	}

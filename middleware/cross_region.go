@@ -14,15 +14,15 @@ import (
 )
 
 func CrossRegionMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
-		c.Header("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
-		c.Header("Access-Control-Max-Age", "1728000")
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(http.StatusOK)
+	return func(ctx *gin.Context) {
+		ctx.Header("Access-Control-Allow-Origin", "*")
+		ctx.Header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+		ctx.Header("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		ctx.Header("Access-Control-Max-Age", "1728000")
+		if ctx.Request.Method == "OPTIONS" {
+			ctx.AbortWithStatus(http.StatusOK)
 			return
 		}
-		c.Next()
+		ctx.Next()
 	}
 }
