@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-31 20:11:34
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-11-01 11:38:36
+ * @LastEditTime: 2023-11-01 22:04:22
  * @Description: 提供的基础logger，其他的logger都是基于此logger进行扩展
  */
 package logit
@@ -120,7 +120,7 @@ func (sl *SimpleLogger) Output(ctx context.Context, level Level, callDepth int, 
 			// 若字段之前在ctx，后面又在fields 里出现，则使用后面传入的
 			if fn, has := fkv[f.Key()]; has {
 				fn.AddTo(enc)
-				// 不需要再打印第二次
+				// 不需要再打印第二次：如requestID在meta&log字段中都有，只需要打印一次
 				delete(fkv, f.Key())
 			} else {
 				f.AddTo(enc)

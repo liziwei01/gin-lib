@@ -34,7 +34,7 @@ Prefix="default"
 # 可以和 Prefix 配合使用
 # 可选值：default-什么都不做，to_body-将level等字段写入日志body
 # 可通过 RegisterBeforeOutputFunc 自定义
-BeforeOutput="to_body"
+BeforeOutput="default"
 
 # 日志编码的对象池名称，可选参数
 # 默认为 default_text（普通文本编码）

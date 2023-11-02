@@ -17,7 +17,7 @@ import (
 type logContextKey int
 
 const (
-	ctxLogFieldsKey logContextKey = iota
+	ctxLogFieldsKey logContextKey = 100 + iota
 	ctxMetaFieldsKey
 )
 

@@ -20,7 +20,7 @@ RunMode = "debug"
 Listen="0.0.0.0:{env.LISTEN_PORT|8080}"
 
 # 读超时时间，ms，可选配置
-ReadTimeout=1000 # 1s
+ReadTimeout=3000 # 1s
  
 # 写超时时间（从请求读取完开始计算），ms，可选配置
 # 若要使用debug功能，请设置一个很大的值
