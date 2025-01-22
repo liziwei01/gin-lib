@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:41:36
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-04 16:05:46
+ * @LastEditTime: 2023-11-20 18:37:15
  * @Description: 环境信息
  */
 package env
@@ -128,6 +128,8 @@ type AppEnv interface {
 	Options() Option
 	// 复制一个新的env对象，并将传入的Option merge进去
 	CloneWithOption(opt Option) AppEnv
+	// IDC
+	IDC() string
 }
 
 // New 创建新的应用环境
@@ -168,6 +170,11 @@ type appEnv struct {
 func setValue(addr *string, value string, fieldName string) {
 	*addr = value
 	_ = log.Output(2, fmt.Sprintf("[env] set %q=%q\n", fieldName, value))
+}
+
+// 获取AppName
+func (a *appEnv) IDC() string {
+	return ""
 }
 
 // 获取AppName

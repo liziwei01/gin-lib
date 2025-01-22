@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-30 12:10:40
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-31 21:38:39
+ * @LastEditTime: 2023-11-03 22:47:38
  * @Description: 日志接口
  */
 
@@ -44,11 +44,13 @@ func NewLogger(ctx context.Context, opts ...Option) (l Logger, errResult error) 
 		return nop, nil
 	}
 
-	mapper := make(map[Level]Logger, 6) // 默认是6个日志等级
+	// 默认是6个日志等级，所以mapper的长度设为6
+	mapper := make(map[Level]Logger, 6)
 	closeFns := make([]func() error, 0, 6)
 
 	var closeWritersFunc func() error
 
+	// 如果 ctx 不为空，那么在 ctx 被取消的时候，关闭所有的writer
 	if ctx != nil {
 		closeWritersFunc = func() error {
 			var builder strings.Builder
@@ -77,7 +79,9 @@ func NewLogger(ctx context.Context, opts ...Option) (l Logger, errResult error) 
 
 		// 如果ctx 被取消，那么关闭所有的writer
 		go func() {
+			// 阻塞，直到 ctx 被取消
 			<-ctx.Done()
+			// 执行关闭，防止日志丢失
 			closeAll()
 		}()
 	}

@@ -4,6 +4,8 @@
 Name = "db_lib"
 
 ## not necessary
+# 连接超时
+ConnTimeOut = 145
 # ms
 WriteTimeOut = 1000
 # ms
@@ -11,8 +13,16 @@ ReadTimeOut = 500
 # Retry num: total num of req = Retry + 1; database/sql has 2 intrinsic retry
 Retry = 2
 
+[Strategy]
+# 资源使用策略，非必选，默认使用 RoundRobin
+#RoundRobin-依次轮询
+#Random-随机
+#LocalityAware-la加权轮询，需要策略配置，
+Name="RoundRobin"
+
 # Resource Ip Port
 [Resource.Manual]
+[[Resource.Manual.default]]
 Host = "localhost"
 Port = 3306
 

@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-04 15:41:55
  * @LastEditors: liziwei01
- * @LastEditTime: 2022-03-04 16:04:40
+ * @LastEditTime: 2023-11-04 15:15:27
  * @Description: 默认配置文件
  */
 package conf
@@ -12,11 +12,11 @@ var Default = NewDefault(nil)
 
 // Parse 解析配置，配置文件默认认为在 conf/目录下
 //
-// 	如配置文件 conf/abc.toml ，则读取时使用 Parse("abc.toml",&xxx)
-// 	推荐使用上述相对文件名老读取配置，这样可通过修改全局应用环境信息的env.ConfDir，来调整配置目录
+//	如配置文件 conf/abc.toml ，则读取时使用 Parse("abc.toml",&xxx)
+//	推荐使用上述相对文件名老读取配置，这样可通过修改全局应用环境信息的env.ConfDir，来调整配置目录
 //
-// 	也支持传入一个绝对路径 或者 相对路径
-// 	如  /tmp/test.toml 或者  ./conf/test.toml
+//	也支持传入一个绝对路径 或者 相对路径
+//	如  /tmp/test.toml 或者  ./conf/test.toml
 func Parse(confName string, obj interface{}) (err error) {
 	return Default.Parse(confName, obj)
 }

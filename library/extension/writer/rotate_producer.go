@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-31 20:05:04
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-11-01 11:32:47
+ * @LastEditTime: 2023-11-04 00:03:13
  * @Description: 日志文件切分规则
  */
 package writer
@@ -55,7 +55,8 @@ func (info RotateInfo) NeedSymlink() bool {
 	return info.Symlink != "" && info.Symlink != info.FilePath
 }
 
-// NewRotateProducer 创建一个新的日志切割分发器
+// NewRotateProducer 创建一个新的日志切割分发器，创建之后会立即启动
+// producer 每次调用都会生成一个新的 RotateInfo ，即实时文件名
 func NewRotateProducer(duration time.Duration, producer func() RotateInfo) RotateProducer {
 	return &rotateProducer{
 		p: timer.NewProducer(duration, func() interface{} {
@@ -64,7 +65,7 @@ func NewRotateProducer(duration time.Duration, producer func() RotateInfo) Rotat
 	}
 }
 
-// NewSimpleRotateProducer 使用已有规则生成具有自动定时变化文件名的分发器
+// NewSimpleRotateProducer 使用已有规则生成具有自动定时变化文件名的分发器，创建之后会立即启动
 func NewSimpleRotateProducer(rule string, fileNamePrefix string) (RotateProducer, error) {
 	if fileNamePrefix == "" {
 		return nil, fmt.Errorf("fileNamePrefix is empty")
@@ -86,6 +87,8 @@ func NewSimpleRotateProducer(rule string, fileNamePrefix string) (RotateProducer
 	}), nil
 }
 
+// 将timer.Producer包装一层，专供日志writer使用
+// 简单的实现 RotateProducer 接口
 type rotateProducer struct {
 	p timer.Producer
 }

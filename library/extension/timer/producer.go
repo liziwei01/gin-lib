@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-31 20:07:09
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-11-01 11:34:07
+ * @LastEditTime: 2023-11-03 23:53:01
  * @Description: 定时器
  */
 package timer
@@ -24,8 +24,9 @@ type Producer interface {
 	Stop()
 }
 
-// NewProducer 创建一个具有定时器的生产者
+// NewProducer 创建一个具有定时器的生产者，创建之后会立即启动
 // 如 duration= 5分钟，则每5分钟产生一个新的value
+// 使用定时器定期调用producerFn，产生新的值
 // 新生成的值会通过回调告知使用者，或者也可以通过Get方法读取到
 func NewProducer(duration time.Duration, producerFn func() interface{}) Producer {
 	p := &producer{
@@ -36,6 +37,7 @@ func NewProducer(duration time.Duration, producerFn func() interface{}) Producer
 	// 确保初始化之后就有值，这样可以立即使用Get方法读取到
 	_ = p.produce()
 
+	// 使用cron定期计算新的值并通知回调函数
 	p.cron.AddJob(func() {
 		val := p.produce()
 		p.fire(val)
@@ -43,12 +45,18 @@ func NewProducer(duration time.Duration, producerFn func() interface{}) Producer
 	return p
 }
 
+// producer 生产者，使用定时器定时产生新的值
 type producer struct {
-	cron         *SimpleCron
+	// 定时器
+	cron *SimpleCron
+	// 用于更新lastValue的生成器函数
 	producerFunc func() interface{}
+	// 回调函数，用于通知使用者
 	callBacks    []func(value interface{})
+	// 保证数据一致性
 	mu           sync.Mutex
-	lastValue    interface{}
+	// 最新的值
+	lastValue interface{}
 }
 
 // RegisterCallBack 注册回调函数，新生成出的内容，将通知给回调函数
@@ -58,6 +66,7 @@ func (p *producer) RegisterCallBack(callBackFunc func(value interface{})) {
 	p.mu.Unlock()
 }
 
+// 通知回调函数
 func (p *producer) fire(val interface{}) {
 	p.mu.Lock()
 	fns := p.callBacks
@@ -68,6 +77,7 @@ func (p *producer) fire(val interface{}) {
 	}
 }
 
+// 更新lastValue
 func (p *producer) produce() interface{} {
 	val := p.producerFunc()
 	p.mu.Lock()

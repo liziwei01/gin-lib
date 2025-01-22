@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-31 20:10:23
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-31 20:10:24
+ * @LastEditTime: 2023-11-03 23:56:04
  * @Description: 错误检查
  */
 package writer
@@ -86,4 +86,5 @@ func keepDirExists(dir string) error {
 	return nil
 }
 
+// 将当前时间函数替换为可配置的函数，方便测试
 var nowFunc = time.Now

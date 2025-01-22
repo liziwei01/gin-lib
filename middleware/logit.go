@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-09-13 16:55:50
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-11-01 21:54:41
+ * @LastEditTime: 2023-11-04 04:03:20
  * @Description: 基于gin日志中间件重写，打印每次接口访问的请求信息
  */
 package middleware
@@ -24,8 +24,8 @@ var fieldsPool = sync.Pool{
 	},
 }
 
-// LogitMiddleware instance a Logger middleware
-func LogitMiddleware() gin.HandlerFunc {
+// GinLoggerMiddleware instance a Logger middleware
+func GinLoggerMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Request = ctx.Request.WithContext(logit.WithContext(ctx.Request.Context()))
 		// Start timer
@@ -62,9 +62,9 @@ func LogitMiddleware() gin.HandlerFunc {
 		fields[6] = logit.Error("err", fmt.Errorf(err))
 
 		if err == "" {
-			logit.SvrLogger.Notice(ctx, err, fields...)
+			logit.SrvLogger.Notice(ctx, err, fields...)
 		} else {
-			logit.SvrLogger.Warning(ctx, err, fields...)
+			logit.SrvLogger.Warning(ctx, err, fields...)
 		}
 	}
 }

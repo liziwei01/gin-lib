@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2022-03-03 16:04:06
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-05-13 05:08:21
+ * @LastEditTime: 2024-12-20 10:07:40
  * @Description: app
  */
 
@@ -111,6 +111,7 @@ func (app *App) Start() error {
 	fmt.Fprintf(DefaultWriter, "[APP START] Listening and serving HTTP on %s\n", app.config.HTTPServer.Listen)
 	// start distribute routers
 	return app.server.ListenAndServe()
+	app.server.ListenAndServe()
 }
 
 // Start start the https service

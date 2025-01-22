@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-11-01 19:26:36
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-11-01 20:16:24
+ * @LastEditTime: 2023-11-03 13:50:51
  * @Description: file content
  */
 package metrics
@@ -31,7 +31,7 @@ func init() {
 
 // prometheusHandler 返回一个处理程序，该处理程序调用 promhttp 包中的 HandlerFor
 func PrometheusHandler() gin.HandlerFunc {
-	h := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{})
+	h := promhttp.Handler()
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}

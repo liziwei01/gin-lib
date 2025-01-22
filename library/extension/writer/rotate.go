@@ -2,7 +2,7 @@
  * @Author: liziwei01
  * @Date: 2023-10-31 21:47:10
  * @LastEditors: liziwei01
- * @LastEditTime: 2023-10-31 21:55:54
+ * @LastEditTime: 2023-11-04 01:40:48
  * @Description: 文件切分
  */
 package writer
@@ -23,6 +23,8 @@ import (
 )
 
 // RotateOption NewRotate的参数
+// 实现了文件切分，文件落盘，文件清理，文件软连接等功能
+// 实现 RotateProducer 接口，可以定时生成新的文件名
 type RotateOption struct {
 	// 用于控制当前写入那个文件，会定期变化
 	// 如每小时返回一个新的文件名
@@ -73,6 +75,8 @@ func NewRotate(opt *RotateOption) (io.WriteCloser, error) {
 	return w, nil
 }
 
+// 实现了 io.WriteCloser 接口
+// 定期flush刷新文件落盘
 type rotateWriter struct {
 	outFile     *os.File
 	outFileInfo os.FileInfo
@@ -254,6 +258,7 @@ func (f *rotateWriter) outFileExists(outFile string) bool {
 	return os.SameFile(info, f.outFileInfo)
 }
 
+// 写入后的数据会先写入到bufFile中，达到一定的数据量 (使用默认值defaultBufSize = 4096，无法修改) 后，再落盘到outFile中 (即当前打开的文件的writer)
 func (f *rotateWriter) Write(p []byte) (n int, err error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
@@ -369,11 +374,6 @@ func checkSymlink(info RotateInfo) error {
 		// 获取相对路径，这样可以保证在不同的运行环境下，都能正常的读取到正确的原始路径
 		if relPath, err := filepath.Rel(symDir, info.FilePath); err == nil {
 			name = relPath
-		}
-
-		if isDebug {
-			// 这个在单测里会用到
-			log.Println("create Symlink", name, info.Symlink)
 		}
 
 		// 当出现 os.IsExist(errSl) 时，可能其他的rotator 已经运行过了
